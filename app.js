@@ -69,7 +69,28 @@ app.post("/addBus",(req,res)=>{
     res.json({"status":"success"})
 })
 
-
+app.post("/viewBus",(req,res)=>{
+    let token = req.headers["token"]
+    jwt.verify(token,"ksrtc-app",(error,decoded)=>{
+        if (error) {
+            res.json({"status":"unauthorized access"})
+        } else {
+            if(decoded)
+                {
+                    busModel.find().then(
+                        (response)=>{
+                            res.json(response)
+                        }
+                    ).catch(
+                        (error)=>{
+                            res.json(error)
+                        }
+                    )
+                }
+        }
+    })
+    
+})
 
 app.listen(8080,()=>{
     console.log("Server Started")
