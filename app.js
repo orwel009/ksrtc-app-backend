@@ -39,7 +39,7 @@ app.post("/signin",(req,res)=>{
               let dbpassword = response[0].password
               bcryptjs.compare(input.password,dbpassword,(error,isMatch)=>{
                   if (isMatch) {
-                      jwt.sign({email:input.email},"blog-app",{expiresIn:"1d"},
+                      jwt.sign({email:input.email},"ksrtc-app",{expiresIn:"1d"},
                           (error,token)=>{
                           if (error) {
                               res.json({"status":"unable to create token"})
@@ -67,6 +67,29 @@ app.post("/addBus",(req,res)=>{
     let bus = new busModel(input)
     bus.save()
     res.json({"status":"success"})
+})
+
+app.post("/viewBus",(req,res)=>{
+    let token = req.headers["token"]
+    jwt.verify(token,"ksrtc-app",(error,decoded)=>{
+        if (error) {
+            res.json({"status":"unauthorized access"})
+        } else {
+            if(decoded)
+                {
+                    busModel.find().then(
+                        (response)=>{
+                            res.json(response)
+                        }
+                    ).catch(
+                        (error)=>{
+                            res.json(error)
+                        }
+                    )
+                }
+        }
+    })
+    
 })
 
 app.listen(8080,()=>{
