@@ -6,7 +6,10 @@ const jwt = require("jsonwebtoken")
 
 
 const users = require("./models/users")
+const buses = require("./models/bus")
 const {userModel} = require("./models/users")
+const {busModel} = require("./models/bus")
+
 const app = express()
 
 const generateHashedPassword = async(password)=>{
@@ -23,7 +26,7 @@ app.post("/signup",async(req,res)=>{
     let input = req.body
     let hashedPassword = await generateHashedPassword(input.password)
     input.password = hashedPassword
-    let user = new users.userModel(input)
+    let user = new userModel(input)
     user.save()
     res.json({"status":"success"})
 })
@@ -57,7 +60,14 @@ app.post("/signin",(req,res)=>{
           res.json(error)
       }
     )  
-  })
+})
+
+app.post("/addBus",(req,res)=>{
+    let input = req.body
+    let bus = new busModel(input)
+    bus.save()
+    res.json({"status":"success"})
+})
 
 app.listen(8080,()=>{
     console.log("Server Started")
