@@ -39,7 +39,7 @@ app.post("/signin",(req,res)=>{
               let dbpassword = response[0].password
               bcryptjs.compare(input.password,dbpassword,(error,isMatch)=>{
                   if (isMatch) {
-                      jwt.sign({email:input.email},"blog-app",{expiresIn:"1d"},
+                      jwt.sign({email:input.email},"ksrtc-app",{expiresIn:"1d"},
                           (error,token)=>{
                           if (error) {
                               res.json({"status":"unable to create token"})
@@ -68,6 +68,8 @@ app.post("/addBus",(req,res)=>{
     bus.save()
     res.json({"status":"success"})
 })
+
+
 
 app.listen(8080,()=>{
     console.log("Server Started")
