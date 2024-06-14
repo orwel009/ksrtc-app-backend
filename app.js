@@ -63,10 +63,19 @@ app.post("/signin",(req,res)=>{
 })
 
 app.post("/addBus",(req,res)=>{
-    let input = req.body
-    let bus = new busModel(input)
-    bus.save()
-    res.json({"status":"success"})
+    let token = req.headers["token"]
+    jwt.verify(token,"ksrtc-app",(error,decoded)=>{
+        if (error) {
+            res.json({"status":"unauthorized access"})
+        } else {
+            if(decoded){
+                let input = req.body
+                let bus = new busModel(input)
+                bus.save()
+                res.json({"status":"success"})
+            }
+        }
+    })
 })
 
 app.post("/viewBus",(req,res)=>{
